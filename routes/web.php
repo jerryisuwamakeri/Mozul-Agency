@@ -4,7 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\BlogCommentController;
 use App\Http\Controllers\CoursesController;
+use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\AnalyticsController;
 use App\Http\Controllers\Admin\ActivityController;
@@ -24,6 +26,7 @@ Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 Route::get('/courses', [CoursesController::class, 'index'])->name('courses.index');
 Route::get('/contact', [ContactController::class, 'show'])->name('contact.index');
+Route::post('/blog/{slug}/comments', [BlogCommentController::class, 'store'])->name('blog.comments.store');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 // Auth routes
@@ -41,6 +44,11 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');
     Route::put('settings', [SettingsController::class, 'update'])->name('settings.update');
     Route::put('settings/password', [SettingsController::class, 'updatePassword'])->name('settings.password');
+    Route::post('settings/test-email', [SettingsController::class, 'sendTestEmail'])->name('settings.test-email');
+
+    Route::get('comments', [CommentController::class, 'index'])->name('comments.index');
+    Route::patch('comments/{comment}/approve', [CommentController::class, 'approve'])->name('comments.approve');
+    Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
     Route::resource('courses', CourseController::class)->except(['show']);
 

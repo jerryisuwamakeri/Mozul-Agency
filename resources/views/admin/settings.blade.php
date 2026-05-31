@@ -32,6 +32,10 @@
                                        class="rounded border-white/20 bg-white/5 text-white focus:ring-white">
                                 <span class="text-gray-400 text-sm">Enable</span>
                             </label>
+                            @elseif($setting->type === 'password')
+                            <input type="password" name="{{ $setting->key }}" value="{{ $setting->value }}"
+                                   autocomplete="new-password"
+                                   class="w-full bg-white/5 border border-white/10 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/10 transition placeholder-gray-600">
                             @else
                             <input type="text" name="{{ $setting->key }}" value="{{ $setting->value }}"
                                    class="w-full bg-white/5 border border-white/10 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/10 transition placeholder-gray-600">
@@ -48,6 +52,42 @@
                 </button>
             </div>
         </form>
+    </div>
+
+    {{-- Test Email --}}
+    <div>
+        <div class="mb-5">
+            <h2 class="text-white font-bold text-lg">Test Email Delivery</h2>
+            <p class="text-gray-500 text-sm mt-1">Send a test email to confirm your SMTP configuration is working.</p>
+        </div>
+
+        @if(session('test_email_success'))
+        <div class="bg-green-500/10 border border-green-500/20 text-green-400 rounded-xl px-4 py-3 mb-5 text-sm">
+            {{ session('test_email_success') }}
+        </div>
+        @endif
+        @if(session('test_email_error'))
+        <div class="bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl px-4 py-3 mb-5 text-sm">
+            {{ session('test_email_error') }}
+        </div>
+        @endif
+
+        <div class="bg-[#13131f] border border-white/5 rounded-2xl overflow-hidden">
+            <div class="p-6">
+                <form method="POST" action="{{ route('admin.settings.test-email') }}" class="flex items-end gap-4">
+                    @csrf
+                    <div class="flex-1">
+                        <label class="block text-sm font-medium text-gray-400 mb-1.5">Send to</label>
+                        <input type="email" name="test_email" required placeholder="you@example.com"
+                               class="w-full bg-white/5 border border-white/10 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/10 transition placeholder-gray-600">
+                        @error('test_email')<p class="text-red-400 text-xs mt-1.5">{{ $message }}</p>@enderror
+                    </div>
+                    <button type="submit" class="bg-white/10 hover:bg-white/20 text-white font-semibold px-6 py-3 rounded-xl text-sm transition-colors whitespace-nowrap">
+                        Send Test Email
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
 
     {{-- Change Password --}}

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\NewSubmissionMail;
 use App\Models\ContactSubmission;
+use App\Services\ActivityLogger;
+use App\Services\MailService;
 use Illuminate\Http\Request;
 
 class ContactController extends Controller
@@ -23,7 +26,12 @@ class ContactController extends Controller
             'message'          => 'required|string|max:3000',
         ]);
 
-        ContactSubmission::create($data);
+        $submission = ContactSubmission::create($data);
+        ActivityLogger::log('created', "New contact submission from {$submission->name} ({$submission->email})");
+
+        if (MailService::notificationsEnabled()) {
+            MailService::sendToAdmin(new NewSubmissionMail($submission));
+        }
 
         return back()->with('success', 'Thank you! We will get back to you shortly.');
     }
