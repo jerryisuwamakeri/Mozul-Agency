@@ -6,6 +6,8 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\Admin\CourseController;
+use App\Http\Controllers\Admin\AnalyticsController;
+use App\Http\Controllers\Admin\ActivityController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\BlogPostController;
 use App\Http\Controllers\Admin\BlogCategoryController;
@@ -30,6 +32,8 @@ require __DIR__.'/auth.php';
 // Admin routes
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('analytics', [AnalyticsController::class, 'index'])->name('analytics');
+    Route::get('activity', [ActivityController::class, 'index'])->name('activity');
 
     Route::resource('blog', BlogPostController::class)->except(['show']);
     Route::resource('blog-categories', BlogCategoryController::class)->except(['create', 'show', 'edit', 'update']);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Services\ActivityLogger;
 use Illuminate\Http\Request;
 
 class BlogPostController extends Controller
@@ -43,7 +44,8 @@ class BlogPostController extends Controller
             $data['published_at'] = now();
         }
 
-        \App\Models\BlogPost::create($data);
+        $post = \App\Models\BlogPost::create($data);
+        ActivityLogger::created($post, 'Blog Post');
 
         return redirect()->route('admin.blog.index')->with('success', 'Post created successfully.');
     }
@@ -76,12 +78,15 @@ class BlogPostController extends Controller
         }
 
         $blog->update($data);
+        $action = $data['status'] === 'published' && !$blog->wasChanged('status') ? 'updated' : ($data['status'] === 'published' ? 'published' : 'updated');
+        ActivityLogger::log($action, ucfirst($action) . " Blog Post: \"{$blog->title}\"", $blog);
 
         return redirect()->route('admin.blog.index')->with('success', 'Post updated successfully.');
     }
 
     public function destroy(\App\Models\BlogPost $blog)
     {
+        ActivityLogger::deleted('Blog Post', $blog->title);
         $blog->delete();
         return back()->with('success', 'Post deleted.');
     }

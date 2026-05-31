@@ -29,6 +29,11 @@ class BlogPost extends Model
         return $query->where('status', 'published')->whereNotNull('published_at');
     }
 
+    public function pageViews()
+    {
+        return $this->morphMany(PageView::class, 'viewable');
+    }
+
     public function getReadingTimeAttribute(): string
     {
         $words = str_word_count(strip_tags($this->content));

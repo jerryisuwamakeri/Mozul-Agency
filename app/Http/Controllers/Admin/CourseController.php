@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Services\ActivityLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -44,7 +45,8 @@ class CourseController extends Controller
             $data['cover_image'] = $request->file('cover_image')->store('courses', 'public');
         }
 
-        Course::create($data);
+        $course = Course::create($data);
+        ActivityLogger::created($course, 'Course');
 
         return redirect()->route('admin.courses.index')->with('success', 'Course created successfully.');
     }
@@ -80,12 +82,14 @@ class CourseController extends Controller
         }
 
         $course->update($data);
+        ActivityLogger::updated($course, 'Course');
 
         return redirect()->route('admin.courses.index')->with('success', 'Course updated successfully.');
     }
 
     public function destroy(Course $course)
     {
+        ActivityLogger::deleted('Course', $course->title);
         $course->delete();
         return back()->with('success', 'Course deleted.');
     }

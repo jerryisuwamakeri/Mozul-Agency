@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BlogCategory;
 use App\Models\BlogPost;
+use App\Services\PageViewTracker;
 use Illuminate\Http\Request;
 
 class BlogController extends Controller
@@ -22,9 +23,10 @@ class BlogController extends Controller
         return view('blog.index', compact('posts', 'categories'));
     }
 
-    public function show(string $slug)
+    public function show(string $slug, Request $request)
     {
         $post = BlogPost::published()->with(['category', 'author'])->where('slug', $slug)->firstOrFail();
+        PageViewTracker::track($post, $request);
         $related = BlogPost::published()
             ->where('id', '!=', $post->id)
             ->when($post->blog_category_id, fn($q) => $q->where('blog_category_id', $post->blog_category_id))
