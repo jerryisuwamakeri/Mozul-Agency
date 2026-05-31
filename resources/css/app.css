@@ -1,0 +1,137 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body { font-family: 'Inter', sans-serif; }
+}
+
+@layer utilities {
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+}
+
+/* Marquee animation */
+@keyframes marquee {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-33.333%); }
+}
+.animate-marquee { animation: marquee 30s linear infinite; }
+
+/* ── TipTap Editor ──────────────────────────────── */
+.tiptap-wrapper {
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.03);
+}
+
+.tiptap-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 8px 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.02);
+    flex-wrap: wrap;
+}
+
+.tiptap-toolbar-group { display: flex; align-items: center; gap: 1px; }
+
+.tiptap-toolbar-divider {
+    width: 1px; height: 18px;
+    background: rgba(255,255,255,0.1);
+    margin: 0 4px;
+    flex-shrink: 0;
+}
+.tiptap-toolbar-spacer { flex: 1; }
+
+.tiptap-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    color: rgba(255,255,255,0.5);
+    font-size: 11px; font-weight: 700;
+    transition: all .15s;
+    background: transparent;
+    border: none; cursor: pointer;
+}
+.tiptap-btn:hover { background: rgba(255,255,255,0.08); color: #fff; }
+.tiptap-btn.is-active { background: rgba(255,255,255,0.15); color: #fff; }
+
+.tiptap-select {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    color: rgba(255,255,255,0.6);
+    font-size: 12px;
+    padding: 3px 8px;
+    cursor: pointer;
+    outline: none;
+}
+.tiptap-select option { background: #1a1a2e; color: #fff; }
+
+.tiptap-content { min-height: 420px; }
+
+.tiptap-editor-body {
+    padding: 20px 24px;
+    min-height: 420px;
+    outline: none;
+    color: rgba(255,255,255,0.85);
+    font-size: 15px;
+    line-height: 1.75;
+    caret-color: #fff;
+}
+
+.tiptap-editor-body h1 { font-size: 2em; font-weight: 800; color: #fff; margin: 1.2em 0 .5em; }
+.tiptap-editor-body h2 { font-size: 1.5em; font-weight: 700; color: #fff; margin: 1.2em 0 .5em; }
+.tiptap-editor-body h3 { font-size: 1.2em; font-weight: 700; color: #fff; margin: 1em 0 .4em; }
+.tiptap-editor-body p  { margin: 0 0 .9em; }
+.tiptap-editor-body strong { color: #fff; font-weight: 700; }
+.tiptap-editor-body em { font-style: italic; }
+.tiptap-editor-body u  { text-decoration: underline; }
+.tiptap-editor-body s  { text-decoration: line-through; color: rgba(255,255,255,0.4); }
+.tiptap-editor-body mark { background: rgba(255,255,255,0.2); color: #fff; border-radius: 2px; padding: 0 2px; }
+.tiptap-editor-body a  { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+.tiptap-editor-body ul { list-style: disc; padding-left: 1.5em; margin: .5em 0 .9em; }
+.tiptap-editor-body ol { list-style: decimal; padding-left: 1.5em; margin: .5em 0 .9em; }
+.tiptap-editor-body li { margin: .25em 0; }
+.tiptap-editor-body blockquote {
+    border-left: 3px solid rgba(255,255,255,0.3);
+    padding-left: 1em; margin: 1em 0;
+    color: rgba(255,255,255,0.5);
+    font-style: italic;
+}
+.tiptap-editor-body pre {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 1em; margin: .9em 0;
+    overflow-x: auto;
+}
+.tiptap-editor-body code { font-family: 'Fira Code', monospace; font-size: .9em; color: rgba(255,255,255,0.85); }
+.tiptap-editor-body hr { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 1.5em 0; }
+.tiptap-editor-body p.is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    float: left; color: rgba(255,255,255,0.2);
+    pointer-events: none; height: 0;
+}
+
+/* ── Reading progress bar ───────────────────────── */
+#reading-progress {
+    position: fixed; top: 0; left: 0; z-index: 9999;
+    height: 2px; width: 0%;
+    background: #fff;
+    transition: width .1s linear;
+}
+
+/* Pagination dark styling */
+.pagination span, .pagination a {
+    @apply bg-white/5 border border-white/10 text-gray-400 px-3 py-1.5 rounded-lg text-sm transition-colors;
+}
+.pagination a:hover { @apply bg-white/10 text-white; }
+.pagination .active span { @apply bg-black text-white border-black; }
